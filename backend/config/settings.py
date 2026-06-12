@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     "drf_spectacular_sidecar",
 
     # Project apps
+    "accounts.apps.AccountsConfig",
     "chat.apps.ChatConfig",
     "game.apps.GameConfig",
 ]
