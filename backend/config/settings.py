@@ -37,6 +37,10 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    
+    # Project apps
+    "src.chat.apps.ChatConfig",
+    "src.game.apps.GameConfig",
 ]
 
 MIDDLEWARE = [
