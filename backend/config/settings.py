@@ -10,7 +10,8 @@ SECRET_KEY = env('SECRET_KEY', default='django-insecure-$9nt-mm+ew()*c-5hl0%6t%k
 
 DEBUG = env.bool('DEBUG', default=True)
 
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'])
+CORS_ALLOW_ALL_ORIGINS = env.bool('CORS_ALLOW_ALL_ORIGINS', default=True)
 
 GEMINI_API_KEY = env('GEMINI_API_KEY', default=None)
 GROQ_API_KEY = env('GROQ_API_KEY', default=None)
