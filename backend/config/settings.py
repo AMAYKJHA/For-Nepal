@@ -74,6 +74,21 @@ DATABASES = {
     }
 }
 
+# Use Postgres when LOCAL=True (reads `DATABASE_URL`), otherwise use SQLite.
+LOCAL = env.bool('LOCAL', default=False)
+
+if LOCAL:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
+else:
+    DATABASES = {
+        "default": env.db("DATABASE_URL")
+    }
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
