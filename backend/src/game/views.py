@@ -17,11 +17,22 @@ def _resolve_request_user(request):
     if getattr(request, "user", None) and request.user.is_authenticated:
         return request.user, None
 
-    raw_user_id = (
-        request.data.get("user_id")
-        or request.query_params.get("user_id")
-        or request.headers.get("X-User-Id")
-    )
+    raw_user_id = None
+
+    request_data = getattr(request, "data", None)
+    if hasattr(request_data, "get"):
+        raw_user_id = request_data.get("user_id")
+
+    if not raw_user_id:
+        query_params = getattr(request, "query_params", None)
+        if hasattr(query_params, "get"):
+            raw_user_id = query_params.get("user_id")
+
+    if not raw_user_id:
+        headers = getattr(request, "headers", None)
+        if hasattr(headers, "get"):
+            raw_user_id = headers.get("X-User-Id")
+
     if not raw_user_id:
         return None, Response(
             {

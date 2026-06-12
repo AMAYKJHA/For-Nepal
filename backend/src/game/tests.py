@@ -122,6 +122,17 @@ class TopicSessionTests(TestCase):
 
         self.assertEqual(response.status_code, 400)
 
+    def test_topic_session_accepts_header_even_with_text_plain_body(self):
+        response = self.client.generic(
+            "GET",
+            f"/api/game/topics/{self.topic.id}/session",
+            "raw-body",
+            content_type="text/plain",
+            HTTP_X_USER_ID=str(self.user.id),
+        )
+
+        self.assertEqual(response.status_code, 200)
+
 
 class SubmitGameStateTests(TestCase):
 	def setUp(self):

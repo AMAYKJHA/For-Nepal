@@ -7,9 +7,13 @@ class TopicSerializer(serializers.ModelSerializer):
         model = Topic
         fields = ["id", "title", "source_filename", "status", "created_at"]
 
+class TopicSerializerForGameSessionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Topic
+        fields = ["id", "title", "source_filename", "quiz_data", "status", "created_at"]
 
 class GameSessionSerializer(serializers.ModelSerializer):
-    topic = TopicSerializer(read_only=True)
+    topic = TopicSerializerForGameSessionSerializer(read_only=True)
     level_name = serializers.SerializerMethodField()
     attempts_count = serializers.SerializerMethodField()
     total_questions = serializers.SerializerMethodField()
