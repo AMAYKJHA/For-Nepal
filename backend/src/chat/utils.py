@@ -1,17 +1,16 @@
-import os
 import re
 import json
-import fitz # 
+import fitz 
 
 from google import genai
 from groq import Groq
 from django.conf import settings
 
 client_genai = genai.Client(
-    api_key=os.getenv('GEMINI_API_KEY'),
+    api_key=settings.GEMINI_API_KEY,
     http_options={'api_version': 'v1beta'},
 )
-groq_client = Groq(api_key=os.getenv('GROQ_API_KEY'))
+groq_client = Groq(api_key=settings.GROQ_API_KEY)
 
 # ── Available models ────────────────────────────────────────
 MODELS = {
