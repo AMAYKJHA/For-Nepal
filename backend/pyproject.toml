@@ -6,5 +6,14 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "django>=6.0.6",
-    "django-restframework>=0.0.1",
+    "django-cors-headers>=4.9.0",
+    "django-environ>=0.13.0",
+    "djangorestframework>=3.17.1",
+    "drf-spectacular>=0.29.0",
+    "drf-spectacular-sidecar>=2026.6.1",
+    "google-genai>=2.8.0",
+    "groq>=1.4.0",
+    "pgvector>=0.4.2",
+    "psycopg2-binary>=2.9.12",
+    "pymupdf>=1.27.2.3",
 ]
