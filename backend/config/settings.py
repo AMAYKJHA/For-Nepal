@@ -38,6 +38,10 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     
+    "rest_framework",
+    "corsheaders",
+    "pgvector",
+    
     # Project apps
     "src.chat.apps.ChatConfig",
     "src.game.apps.GameConfig",
