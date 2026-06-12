@@ -2,17 +2,18 @@ from pathlib import Path
 
 from django.contrib.auth.models import User
 from django.db import transaction
+from django.utils import timezone
 from rest_framework import status
 from rest_framework.decorators import api_view, parser_classes
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
-from .models import Topic
-from .serializers import TopicSerializer
+from .models import Topic, GameSession
+from .serializers import TopicSerializer, GameSessionSerializer, GameSessionStateUpdateSerializer
 from chat.utils import extract_text_by_page
 from .utils import generate_quiz
 
 
-def _resolve_upload_user(request):
+def _resolve_request_user(request):
     if getattr(request, "user", None) and request.user.is_authenticated:
         return request.user, None
 
@@ -46,6 +47,10 @@ def _resolve_upload_user(request):
         )
 
 
+def _resolve_upload_user(request):
+    return _resolve_request_user(request)
+
+
 @api_view(["GET"])
 def user_topics(request, user_id):
     try:
@@ -54,6 +59,70 @@ def user_topics(request, user_id):
         return Response({"detail": "User not found"}, status=404)
     topics = Topic.objects.filter(user=user)
     return Response(TopicSerializer(topics, many=True).data)
+
+
+@api_view(["GET"])
+def topic_session(request, topic_id):
+    user, error_response = _resolve_request_user(request)
+    if error_response is not None:
+        return error_response
+
+    try:
+        topic = Topic.objects.get(id=topic_id, user=user)
+    except Topic.DoesNotExist:
+        return Response({"detail": "Topic not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    session = GameSession.objects.filter(user=user, topic=topic).order_by("-started_at").first()
+    created = False
+
+    if session is None:
+        session = GameSession.objects.create(user=user, topic=topic)
+        created = True
+
+    return Response(
+        {
+            "created": created,
+            "session": GameSessionSerializer(session).data,
+        },
+        status=status.HTTP_200_OK,
+    )
+
+
+@api_view(["PATCH"])
+def submit_game_state(request, session_id):
+    user, error_response = _resolve_request_user(request)
+    if error_response is not None:
+        return error_response
+
+    try:
+        session = GameSession.objects.select_related("topic").get(id=session_id, user=user)
+    except GameSession.DoesNotExist:
+        return Response({"detail": "Game session not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    serializer = GameSessionStateUpdateSerializer(data=request.data, partial=True)
+    serializer.is_valid(raise_exception=True)
+    update_data = serializer.validated_data
+
+    for field, value in update_data.items():
+        setattr(session, field, value)
+
+    if "status" in update_data:
+        if session.status in [GameSession.Status.COMPLETED, GameSession.Status.DEFEATED]:
+            if session.completed_at is None:
+                session.completed_at = timezone.now()
+        elif session.status == GameSession.Status.ACTIVE:
+            session.completed_at = None
+
+    update_fields = list(update_data.keys())
+    if "status" in update_data:
+        update_fields.append("completed_at")
+
+    session.save(update_fields=update_fields)
+
+    return Response(
+        {"session": GameSessionSerializer(session).data},
+        status=status.HTTP_200_OK,
+    )
 
 
 @api_view(["POST"])
