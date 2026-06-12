@@ -17,4 +17,5 @@ dependencies = [
     "pgvector>=0.4.2",
     "psycopg2-binary>=2.9.12",
     "pymupdf>=1.27.2.3",
+    "whitenoise>=6.11.0",
 ]
