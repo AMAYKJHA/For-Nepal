@@ -1,0 +1,254 @@
+.gameShell {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  max-width: 980px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.canvasMount {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #05070d;
+  border: 1px solid var(--color-panel-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+/* HP bar */
+.hpBar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.hpLabel {
+  font-weight: 700;
+  color: var(--color-hp);
+  width: 2.5rem;
+}
+
+.hpTrack {
+  flex: 1;
+  height: 18px;
+  background: var(--color-panel);
+  border: 1px solid var(--color-panel-border);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.hpFill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-danger), var(--color-hp));
+  transition: width 0.3s ease;
+}
+
+.hpValue {
+  font-variant-numeric: tabular-nums;
+  color: var(--color-muted);
+}
+
+/* Question box */
+.questionBox {
+  background: var(--color-panel);
+  border: 1px solid var(--color-panel-border);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  box-shadow: var(--shadow-panel);
+}
+
+.questionPrompt {
+  margin: 0 0 1rem;
+  font-size: 1.1rem;
+}
+
+.options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.optionBtn {
+  padding: 0.75rem 1rem;
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-panel-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-foreground);
+  font: inherit;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.optionBtn:hover {
+  border-color: var(--color-primary);
+  box-shadow: var(--glow-primary);
+}
+
+/* Controls */
+.controls {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.controlBtn {
+  padding: 0.7rem 1.6rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-panel-border);
+  background: var(--color-panel);
+  color: var(--color-foreground);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.controlBtn:hover {
+  transform: translateY(-1px);
+}
+
+.shieldBtn {
+  border-color: var(--color-shield);
+  color: var(--color-shield);
+}
+
+.attackBtn {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+/* Level declare */
+.levelDeclare {
+  text-align: center;
+  padding: 2rem;
+}
+
+.levelNumber {
+  color: var(--color-primary-glow);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+}
+
+.levelTitle {
+  margin: 0.5rem 0 0;
+  font-size: 2rem;
+}
+
+/* Overlays */
+.overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(5, 7, 13, 0.72);
+  z-index: 100;
+}
+
+.overlayCard {
+  background: var(--color-panel);
+  border: 1px solid var(--color-panel-border);
+  border-radius: var(--radius-lg);
+  padding: 2rem 2.5rem;
+  text-align: center;
+  box-shadow: var(--shadow-panel);
+  min-width: 320px;
+}
+
+.overlayText {
+  color: var(--color-muted);
+}
+
+.overlayActions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.gameOverTitle {
+  color: var(--color-danger);
+  margin: 0;
+}
+
+.victoryTitle {
+  color: var(--color-success);
+  margin: 0;
+}
+
+/* Rewards */
+.rewards {
+  background: var(--color-panel);
+  border: 1px solid var(--color-panel-border);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+}
+
+.rewardsTitle {
+  margin: 0 0 0.5rem;
+}
+
+.rewardsXp {
+  color: var(--color-xp);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.rewardsList {
+  margin: 0.75rem 0 0;
+  padding-left: 1.25rem;
+  color: var(--color-muted);
+}
+
+/* World map */
+.worldMap {
+  flex: 1;
+  padding: 2rem;
+}
+
+.worldMapTitle {
+  text-align: center;
+}
+
+.mapBoard {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  margin-top: 1rem;
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-panel-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.mapNode {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--color-foreground);
+}
+
+.mapNode:hover {
+  text-decoration: none;
+}
+
+.mapNodeDot {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  box-shadow: var(--glow-primary);
+}
+
+.mapNodeLabel {
+  font-size: 0.85rem;
+  color: var(--color-muted);
+}

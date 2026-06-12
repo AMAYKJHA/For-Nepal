@@ -1,0 +1,243 @@
+/* ===== Arcane Scholar — Chat Mode (Brutal-Retro Pixel Fantasy) ===== */
+
+.shell {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+  background: var(--surface);
+}
+
+/* --- Sidebar (Window panel) --- */
+.sidebar {
+  width: 240px;
+  border-right: var(--pixel-border) solid var(--bevel-dark);
+  background: var(--surface-container-low);
+  box-shadow: inset 1px 0 0 var(--bevel-light);
+  padding: var(--container-margin) var(--gutter);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.navItem {
+  text-align: left;
+  padding: 12px;
+  border: 1px solid var(--outline-variant);
+  background: var(--surface-container);
+  color: var(--on-surface-variant);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: transform 0.05s linear;
+}
+
+.navItem:hover {
+  border-color: var(--bevel-light);
+  color: var(--on-surface);
+}
+
+.navItemActive {
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+  border-color: var(--bevel-dark);
+  box-shadow: inset 1px 1px 0 var(--bevel-light);
+}
+
+/* --- Main content area --- */
+.content {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+  padding: var(--container-margin);
+}
+
+/* --- Chat view --- */
+.chatView {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gutter);
+}
+
+.messages {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.placeholder {
+  color: var(--outline);
+  font-family: var(--font-body);
+  font-size: 16px;
+}
+
+.msg {
+  max-width: 70%;
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  border: 1px solid var(--bevel-dark);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.user {
+  align-self: flex-end;
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+  box-shadow: inset 1px 1px 0 var(--bevel-light);
+}
+
+.assistant {
+  align-self: flex-start;
+  background: var(--surface-container-high);
+  color: var(--on-surface);
+  box-shadow: inset 1px 1px 0 var(--outline-variant);
+}
+
+/* --- Composer / input row --- */
+.composer {
+  display: flex;
+  gap: 8px;
+}
+
+.input {
+  flex: 1;
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  border: var(--pixel-border) solid var(--bevel-dark);
+  background: var(--surface-container-lowest);
+  color: var(--on-surface);
+  font-family: var(--font-body);
+  font-size: 16px;
+  caret-color: var(--primary);
+}
+
+.input::placeholder {
+  color: var(--outline);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--bevel-light);
+}
+
+/* --- Buttons (mechanical press) --- */
+.sendBtn {
+  padding: 12px 20px;
+  border-radius: var(--radius);
+  border: var(--pixel-border) solid var(--bevel-dark);
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+  font-family: var(--font-display);
+  font-size: 12px;
+  line-height: 16px;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: inset 1px 1px 0 var(--bevel-light);
+  transition: transform 0.05s linear;
+}
+
+.sendBtn:hover {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+
+.sendBtn:active {
+  transform: translateY(2px);
+  box-shadow: none;
+}
+
+/* --- Generic panel view (Memory Vault, Search, Flashcards) --- */
+.panelView {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gutter);
+}
+
+.panelView h2 {
+  font-family: var(--font-display);
+  font-size: 18px;
+  line-height: 24px;
+  text-transform: uppercase;
+  color: var(--on-surface);
+  margin: 0;
+}
+
+.vaultList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.vaultItem {
+  padding: 12px 16px;
+  background: var(--surface-container);
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius);
+  box-shadow: inset 1px 1px 0 var(--bevel-light);
+  font-family: var(--font-body);
+  color: var(--on-surface);
+}
+
+/* --- Flashcards --- */
+.flashcard {
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--container-margin);
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 28px;
+  text-align: center;
+  background: var(--surface-container-high);
+  border: var(--pixel-border) solid var(--bevel-dark);
+  border-radius: var(--radius);
+  box-shadow: inset 1px 1px 0 var(--bevel-light);
+  color: var(--on-surface);
+  cursor: pointer;
+}
+
+/* --- Model selector --- */
+.modelSelector {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.modelLabel {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--on-surface-variant);
+}
+
+.modelSelect {
+  padding: 12px;
+  border-radius: var(--radius);
+  border: 1px solid var(--bevel-dark);
+  background: var(--surface-container-lowest);
+  color: var(--on-surface);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  box-shadow: inset 1px 1px 0 var(--outline-variant);
+}
