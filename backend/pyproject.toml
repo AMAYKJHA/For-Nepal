@@ -13,6 +13,7 @@ dependencies = [
     "drf-spectacular-sidecar>=2026.6.1",
     "google-genai>=2.8.0",
     "groq>=1.4.0",
+    "gunicorn>=26.0.0",
     "pgvector>=0.4.2",
     "psycopg2-binary>=2.9.12",
     "pymupdf>=1.27.2.3",
