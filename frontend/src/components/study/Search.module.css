@@ -1,0 +1,55 @@
+.container { height: 100%; overflow-y: auto; background: var(--bg); }
+.inner { max-width: 820px; margin: 0 auto; padding: 30px 28px; }
+
+.header { margin-bottom: 26px; }
+.title { font-size: 24px; font-weight: 800; color: var(--text-1); letter-spacing: -0.6px; margin-bottom: 6px; }
+.subtitle { font-size: 14px; color: var(--text-6); }
+
+.searchWrap { position: relative; margin-bottom: 20px; }
+.searchIcon { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--text-7); font-size: 20px; pointer-events: none; }
+.searchInput { width: 100%; background: var(--surface); border: 1.5px solid var(--border); border-radius: 14px; padding: 15px 130px 15px 52px; color: var(--text-1); font-size: 15px; outline: none; transition: border-color 0.2s, box-shadow 0.2s; box-shadow: 0 1px 6px rgba(108,92,231,0.07); }
+.searchInput:focus { border-color: #a78bfa !important; box-shadow: 0 0 0 4px rgba(124,106,247,0.1) !important; }
+.searchBtn { position: absolute; right: 9px; top: 50%; transform: translateY(-50%); background: linear-gradient(135deg, #7c6af7, #5b4ecf); border: none; border-radius: 10px; padding: 9px 20px; color: #fff; cursor: pointer; font-size: 14px; font-weight: 700; box-shadow: 0 2px 12px rgba(124,106,247,0.35); transition: all 0.2s; }
+.searchBtn:disabled { background: var(--bg); color: var(--text-8); cursor: default; box-shadow: none; }
+
+.suggestions { display: flex; flex-wrap: wrap; gap: 9px; margin-bottom: 44px; }
+.suggestionLabel { font-size: 13px; color: var(--text-8); align-self: center; margin-right: 4px; font-weight: 500; }
+.suggestionChip { transition: all 0.15s; background: var(--surface); border: 1.5px solid var(--border); border-radius: 22px; padding: 6px 15px; color: var(--text-6); cursor: pointer; font-size: 13px; font-weight: 500; box-shadow: 0 1px 4px rgba(108,92,231,0.06); }
+.suggestionChip:hover { background: var(--border) !important; border-color: #c4b5fd !important; color: #6c5ce7 !important; }
+
+.loadingWrap { text-align: center; padding: 70px 0; color: var(--text-8); }
+.loadingText { font-size: 14px; margin-bottom: 14px; color: var(--text-6); font-weight: 500; }
+.loadingDots { display: flex; gap: 7px; justify-content: center; }
+.loadingDot { width: 9px; height: 9px; border-radius: 50%; background: #7c6af7; opacity: 0.5; animation: search-pulse 1.35s infinite ease-in-out; }
+.loadingDot:nth-child(1) { animation-delay: 0s; }
+.loadingDot:nth-child(2) { animation-delay: 0.18s; }
+.loadingDot:nth-child(3) { animation-delay: 0.36s; }
+
+.emptyWrap { text-align: center; padding: 70px 0; }
+.emptyIcon { font-size: 52px; margin-bottom: 18px; }
+.emptyTitle { font-size: 18px; color: var(--text-3); font-weight: 700; margin-bottom: 10px; }
+.emptySub { font-size: 14px; color: var(--text-6); }
+
+.noResultsIcon { font-size: 40px; margin-bottom: 18px; }
+
+.resultsWrap { display: flex; flex-direction: column; gap: 13px; }
+.resultsMeta { font-size: 13.5px; color: var(--text-6); margin-bottom: 6px; font-weight: 500; }
+.resultsMeta em { color: #7c6af7; font-style: normal; font-weight: 700; }
+
+.resultCard { transition: border-color 0.18s, transform 0.15s, box-shadow 0.18s; background: var(--surface); border: 1.5px solid var(--border); border-radius: 14px; padding: 18px 20px; box-shadow: 0 1px 6px rgba(108,92,231,0.06); }
+.resultCard:hover { border-color: #c4b5fd !important; transform: translateY(-2px); box-shadow: 0 6px 24px rgba(108,92,231,0.12) !important; }
+
+.resultTop { display: flex; gap: 9px; margin-bottom: 12px; align-items: center; }
+.topicBadge { font-size: 12px; padding: 3px 12px; border-radius: 22px; font-weight: 700; }
+.resultDate { font-size: 12px; color: var(--text-8); margin-left: auto; font-weight: 500; }
+
+.resultQuestion { font-weight: 700; font-size: 15px; color: var(--text-1); margin-bottom: 9px; line-height: 1.46; }
+.resultAnswer { font-size: 13.5px; color: var(--text-4); line-height: 1.68; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 14px; }
+
+.openChatBtn { transition: all 0.15s; background: var(--bg); border: 1.5px solid var(--border); border-radius: 9px; padding: 6px 14px; color: #7c6af7; cursor: pointer; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
+.openChatBtn:hover { background: var(--border) !important; color: #6c5ce7 !important; }
+
+@keyframes search-pulse {
+  0%, 60%, 100% { transform: scale(0.6); opacity: 0.25; }
+  30% { transform: scale(1); opacity: 1; }
+}

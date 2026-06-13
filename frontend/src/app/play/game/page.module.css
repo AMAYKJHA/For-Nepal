@@ -1,0 +1,323 @@
+/* ── Viewport wrapper ─────────────────────────────────────────────── */
+.wrapper {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #111;
+}
+
+/* ── Phaser canvas container ──────────────────────────────────────── */
+.gameContainer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.gameContainer canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+/* ── React UI overlay (sits on top of Phaser canvas) ─────────────── */
+.uiOverlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+}
+
+/* ── Question bubble — top center ────────────────────────────────── */
+.questionBubble {
+  position: absolute;
+  top: 7%;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 340px;
+  max-width: 500px;
+  background: rgba(106, 61, 180, 0.88);
+  border: 2px solid rgba(180, 130, 255, 0.75);
+  border-radius: 18px;
+  padding: 18px 28px 14px;
+  pointer-events: none;
+  box-shadow: 0 0 28px rgba(140, 80, 255, 0.45), 0 0 8px rgba(0,0,0,0.6);
+  backdrop-filter: blur(4px);
+  text-align: center;
+}
+
+/* Downward tail */
+.questionBubble::after {
+  content: '';
+  position: absolute;
+  bottom: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 14px 10px 0 10px;
+  border-style: solid;
+  border-color: rgba(106, 61, 180, 0.88) transparent transparent transparent;
+}
+
+.questionText {
+  margin: 0 0 12px;
+  font-size: 17px;
+  font-family: 'Georgia', serif;
+  color: #ffffff;
+  line-height: 1.45;
+  letter-spacing: 0.02em;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+}
+
+/* Timer bar inside bubble */
+.timerTrack {
+  width: 100%;
+  height: 7px;
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+
+.timerFill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.9s linear, background 0.5s ease;
+}
+
+.timerLabel {
+  font-size: 12px;
+  font-family: monospace;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+/* ── A / B / C / D circle cluster — left side, near hero ─────────── */
+.circleCluster {
+  position: absolute;
+  left: 4%;
+  bottom: 14%;
+  display: grid;
+  grid-template-areas:
+    ". b ."
+    "a . c"
+    ". d .";
+  grid-template-columns: 62px 62px 62px;
+  grid-template-rows:    62px 62px 62px;
+  gap: 6px;
+  pointer-events: all;
+}
+
+.circleBtn {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  border: 2px solid rgba(180, 130, 255, 0.7);
+  background: rgba(90, 50, 160, 0.78);
+  color: #ffffff;
+  font-size: 20px;
+  font-family: 'Georgia', serif;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.18s, border-color 0.18s, transform 0.15s, box-shadow 0.18s;
+  box-shadow: 0 0 12px rgba(140, 80, 255, 0.4);
+  backdrop-filter: blur(3px);
+}
+
+.circleBtn:hover:not(:disabled) {
+  background: rgba(140, 80, 255, 0.92);
+  border-color: #f0c040;
+  transform: scale(1.12);
+  box-shadow: 0 0 22px rgba(240, 192, 64, 0.55);
+}
+
+.circleBtn:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+.circleBtnSelected {
+  background: rgba(240, 192, 64, 0.85) !important;
+  border-color: #f0c040 !important;
+  box-shadow: 0 0 26px rgba(240, 192, 64, 0.7) !important;
+  color: #1a0a00;
+}
+
+.circleBtn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ── Bottom option pill buttons ───────────────────────────────────── */
+.optionRow {
+  position: absolute;
+  bottom: 3%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 14px;
+  pointer-events: all;
+  width: 78%;
+  justify-content: center;
+}
+
+.optionBtn {
+  flex: 1;
+  max-width: 240px;
+  padding: 13px 18px;
+  border-radius: 40px;
+  border: 2px solid rgba(180, 130, 255, 0.65);
+  background: rgba(90, 50, 160, 0.78);
+  color: #ffffff;
+  font-size: 15px;
+  font-family: 'Georgia', serif;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: background 0.18s, border-color 0.18s, transform 0.15s, box-shadow 0.18s;
+  box-shadow: 0 0 14px rgba(140, 80, 255, 0.35);
+  backdrop-filter: blur(4px);
+  white-space: nowrap;
+}
+
+.optionBtn:hover:not(:disabled) {
+  background: rgba(140, 80, 255, 0.92);
+  border-color: #f0c040;
+  transform: translateY(-3px);
+  box-shadow: 0 0 24px rgba(240, 192, 64, 0.5);
+}
+
+.optionBtn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.optionSelected {
+  background: rgba(240, 192, 64, 0.85) !important;
+  border-color: #f0c040 !important;
+  box-shadow: 0 0 28px rgba(240, 192, 64, 0.65) !important;
+  color: #1a0a00 !important;
+}
+
+.optionBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Label badge (A / B / C / D) inside pill */
+.optionLabel {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  font-size: 13px;
+  font-weight: bold;
+  flex-shrink: 0;
+  border: 1px solid rgba(255,255,255,0.3);
+}
+
+/* ── XP Earned Display ───────────────────────────────────────────── */
+.xpOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  pointer-events: none;
+  animation: xpFadeIn 0.5s ease-out;
+}
+
+.xpContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  animation: xpBounce 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.xpIcon {
+  font-size: 80px;
+  animation: xpSpin 1s ease-out;
+}
+
+.xpText {
+  font-size: 64px;
+  font-weight: bold;
+  color: #ffd700;
+  text-shadow: 0 0 20px rgba(255, 215, 0, 0.8), 0 4px 8px rgba(0, 0, 0, 0.5);
+  font-family: 'Georgia', serif;
+  letter-spacing: 2px;
+}
+
+.xpSubtext {
+  font-size: 24px;
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  font-family: 'Georgia', serif;
+  letter-spacing: 1px;
+}
+
+@keyframes xpFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes xpBounce {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+@keyframes xpSpin {
+  from { transform: rotate(0deg) scale(0); }
+  to { transform: rotate(360deg) scale(1); }
+}
+
+/* ── Floating XP gain animation ─────────────────────────────────── */
+.xpFloatOverlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 60;
+  pointer-events: none;
+}
+
+.xpFloatText {
+  font-size: 48px;
+  font-weight: bold;
+  color: #ffd700;
+  text-shadow: 
+    0 0 10px rgba(255, 215, 0, 0.8),
+    0 0 20px rgba(255, 215, 0, 0.6),
+    0 4px 8px rgba(0, 0, 0, 0.8);
+  font-family: 'Georgia', serif;
+  letter-spacing: 2px;
+  animation: xpFloatUp 1.2s ease-out forwards;
+}
+
+@keyframes xpFloatUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.5);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(-10px) scale(1.2);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-60px) scale(1);
+  }
+}

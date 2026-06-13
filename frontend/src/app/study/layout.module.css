@@ -1,0 +1,24 @@
+.shell {
+  display: flex !important;
+  flex-direction: row !important;
+  height: 100vh !important;
+  width: 100vw !important;
+  overflow: hidden !important;
+  background: var(--bg);
+}
+
+.mainArea {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  min-width: 0 !important; /* Crucial: prevents flex child from breaking layout */
+  height: 100% !important;
+}
+
+.content {
+  flex: 1 !important;
+  overflow: hidden !important;
+  position: relative !important;
+  height: 100% !important;
+}

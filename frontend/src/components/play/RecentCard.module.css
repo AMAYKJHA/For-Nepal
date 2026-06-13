@@ -1,0 +1,58 @@
+.card {
+  background-color: #1c1b22;
+  border: 2px solid #393840;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+
+.card:hover {
+  border-color: #a78bfa;
+}
+
+@media (min-width: 640px) {
+  .card {
+    flex-direction: row;
+  }
+}
+
+.title {
+  font-size: 1.5rem;
+  transition: color 0.3s ease;
+}
+
+/* When the card is hovered, change the title color */
+.card:hover .title {
+  color: #a78bfa;
+}
+
+.statusBadge {
+  margin-top: 0.5rem;
+  padding: 0.25rem 2rem;
+  border-radius: 0.25rem;
+  font-size: 1.25rem;
+  border-width: 2px;
+  border-style: solid;
+}
+
+@media (min-width: 640px) {
+  .statusBadge {
+    margin-top: 0;
+  }
+}
+
+/* Color Variants for the Badge */
+.completed {
+  background-color: #534ab7;
+  border-color: #a78bfa;
+}
+
+.inProgress {
+  background-color: #393840;
+  border-color: #534ab7;
+}

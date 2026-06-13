@@ -1,0 +1,74 @@
+.container { height: 100%; overflow-y: auto; background: var(--bg); }
+.inner { max-width: 860px; margin: 0 auto; padding: 30px 28px; }
+
+.title { font-size: 24px; font-weight: 800; color: var(--text-1); margin-bottom: 8px; }
+.subtitle { color: var(--text-6); margin-bottom: 22px; }
+
+.loading { color: var(--text-7); padding: 50px 0; text-align: center; }
+
+.emptyCard {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 40px 22px;
+  text-align: center;
+  color: var(--text-5);
+}
+
+.reviewCard {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 16px;
+  padding: 26px 24px;
+  box-shadow: 0 4px 16px rgba(30, 20, 80, 0.08);
+}
+
+.label {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: var(--text-8);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+
+.prompt {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-1);
+  line-height: 1.5;
+  margin-bottom: 22px;
+}
+
+.answer {
+  font-size: 15px;
+  color: var(--text-3);
+  line-height: 1.7;
+  margin-bottom: 22px;
+}
+
+.btnGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.diffBtn {
+  border: 1.5px solid;
+  border-radius: 10px;
+  padding: 10px 8px;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.15s;
+}
+
+.diffBtn:hover:not(:disabled) {
+  opacity: 0.85;
+  transform: translateY(-1px);
+}
+
+.diffBtn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}

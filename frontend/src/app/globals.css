@@ -1,0 +1,137 @@
+/* ===== Arcane Scholar — Dark Pixel Fantasy Design Tokens ===== */
+
+:root {
+  /* --- Surfaces --- */
+  --surface: #131319;
+  --surface-dim: #131319;
+  --surface-bright: #393840;
+  --surface-container-lowest: #0e0d14;
+  --surface-container-low: #1c1b22;
+  --surface-container: #201f26;
+  --surface-container-high: #2a2930;
+  --surface-container-highest: #35343b;
+  --surface-variant: #35343b;
+
+  /* --- On-surface text --- */
+  --on-surface: #e5e1eb;
+  --on-surface-variant: #c8c4d5;
+  --inverse-surface: #e5e1eb;
+  --inverse-on-surface: #312f37;
+
+  /* --- Outlines --- */
+  --outline: #928f9e;
+  --outline-variant: #474553;
+
+  /* --- Primary --- */
+  --surface-tint: #c5c0ff;
+  --primary: #c5c0ff;
+  --on-primary: #28188c;
+  --primary-container: #534ab7;
+  --on-primary-container: #d1ccff;
+  --inverse-primary: #584fbc;
+  --primary-fixed: #e3dfff;
+  --primary-fixed-dim: #c5c0ff;
+  --on-primary-fixed: #140067;
+  --on-primary-fixed-variant: #3f35a3;
+
+  /* --- Secondary --- */
+  --secondary: #c5c0ff;
+  --on-secondary: #2d2863;
+  --secondary-container: #443f7b;
+  --on-secondary-container: #b3aef2;
+  --secondary-fixed: #e3dfff;
+  --secondary-fixed-dim: #c5c0ff;
+  --on-secondary-fixed: #17114d;
+  --on-secondary-fixed-variant: #443f7b;
+
+  /* --- Tertiary --- */
+  --tertiary: #ffb77d;
+  --on-tertiary: #4d2600;
+  --tertiary-container: #8a4900;
+  --on-tertiary-container: #ffc69a;
+  --tertiary-fixed: #ffdcc3;
+  --tertiary-fixed-dim: #ffb77d;
+  --on-tertiary-fixed: #2f1500;
+  --on-tertiary-fixed-variant: #6e3900;
+
+  /* --- Error / feedback --- */
+  --error: #ffb4ab;
+  --on-error: #690005;
+  --error-container: #93000a;
+  --on-error-container: #ffdad6;
+
+  /* --- Background --- */
+  --background: #131319;
+  --on-background: #e5e1eb;
+
+  /* --- Bevel / pixel light source --- */
+  --bevel-light: #7f77dd;
+  --bevel-dark: #000000;
+
+  /* --- Typography --- */
+  --font-display: var(--font-display), "Courier New", monospace;
+  --font-body: var(--font-body), system-ui, sans-serif;
+  --font-mono: var(--font-mono), "Courier New", monospace;
+
+  /* --- Spacing (4px baseline grid) --- */
+  --space-unit: 4px;
+  --container-margin: 24px;
+  --gutter: 16px;
+  --pixel-border: 2px;
+
+  /* Strictly 0 radius — pixel-perfect corners */
+  --radius: 0px;
+
+  /* --- Legacy aliases (Navbar / play / ui components) --- */
+  --color-bg: var(--background);
+  --color-bg-alt: var(--surface-container-low);
+  --color-panel: var(--surface-container);
+  --color-panel-border: var(--outline-variant);
+  --color-foreground: var(--on-surface);
+  --color-muted: var(--outline);
+  --color-primary: var(--primary-container);
+  --color-primary-glow: var(--bevel-light);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--tertiary);
+  --color-danger: var(--error);
+  --color-success: #1d9e75;
+  --color-hp: var(--error);
+  --color-shield: var(--bevel-light);
+  --color-xp: var(--tertiary);
+  --font-sans: var(--font-body);
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --glow-primary: inset 1px 1px 0 var(--bevel-light);
+  --shadow-panel: inset 1px 1px 0 var(--bevel-light);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  background: var(--background);
+  color: var(--on-background);
+  font-family: var(--font-body);
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
