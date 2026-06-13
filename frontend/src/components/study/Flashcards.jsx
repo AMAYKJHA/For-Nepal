@@ -22,7 +22,10 @@ export default function Flashcards() {
     setLoading(true);
     try {
       const res = await flashcardAPI.getAll();
-      setFlashcards(res.data);
+      setFlashcards(Array.isArray(res.data)
+        ? res.data
+        : (res.data?.flashcards ?? res.data?.results ?? Object.values(res.data ?? {}) ?? [])
+      );
     } catch (err) { console.error(err); }
     setLoading(false);
   };
@@ -33,7 +36,10 @@ export default function Flashcards() {
       const res = activeFilter
         ? await flashcardAPI.bulkGenerate({ subject: activeFilter })
         : await flashcardAPI.bulkGenerate();
-      setFlashcards(res.data);
+      setFlashcards(Array.isArray(res.data)
+        ? res.data
+        : (res.data?.flashcards ?? res.data?.results ?? Object.values(res.data ?? {}) ?? [])
+      );
       setFlipped({});
     } catch (err) { console.error(err); }
     setGenerating(false);
@@ -54,8 +60,12 @@ export default function Flashcards() {
     if (e.key === 'Escape') clearFilter();
   };
 
+  const cardsArray = Array.isArray(flashcards)
+    ? flashcards
+    : (flashcards?.flashcards ?? flashcards?.results ?? Object.values(flashcards ?? {}) ?? []);
+
   const visibleCards = activeFilter
-    ? flashcards.filter(fc => {
+    ? cardsArray.filter(fc => {
         const q = activeFilter.toLowerCase();
         return (
           fc.front?.toLowerCase().includes(q) ||
@@ -64,7 +74,7 @@ export default function Flashcards() {
           fc.subject?.toLowerCase().includes(q)
         );
       })
-    : flashcards;
+    : cardsArray;
 
   const toggleFlip = (id) => setFlipped(prev => ({ ...prev, [id]: !prev[id] }));
 
@@ -241,14 +251,15 @@ export default function Flashcards() {
           </div>
         ) : (
           <div className={styles.grid}>
-            {visibleCards.map(fc => {
-              const isFlipped = !!flipped[fc.id];
-              return (
-                <div
-                  key={fc.id}
-                  className={`${styles.card} ${isFlipped ? styles.cardFlipped : ''}`}
-                  onClick={() => toggleFlip(fc.id)}
-                >
+            {visibleCards.map((fc, idx) => {
+                const isFlipped = !!flipped[fc?.id ?? `card-${idx}`];
+                const key = fc?.id ?? fc?.memory ?? `card-${idx}`;
+                return (
+                  <div
+                    key={key}
+                    className={`${styles.card} ${isFlipped ? styles.cardFlipped : ''}`}
+                    onClick={() => toggleFlip(fc?.id ?? `card-${idx}`)}
+                  >
                   {!isFlipped ? (
                     <>
                       <div className={styles.cardLabel}>Question</div>
