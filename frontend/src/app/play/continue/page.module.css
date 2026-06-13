@@ -1,0 +1,226 @@
+/* Import Fonts and Icons */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=JetBrains+Mono:wght@400;600&family=Hanken+Grotesk:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
+
+/* Global Icon Settings */
+:global(.material-symbols-outlined) {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Base Body Styles */
+.body {
+  background-color: #131319;
+  background-image: radial-gradient(#1A1035 1px, transparent 1px);
+  background-size: 20px 20px;
+  color: #e5e1eb;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  margin: 0;
+}
+
+/* ========================================= */
+/* HEADER */
+/* ========================================= */
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.headerTitle {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 24px;
+  line-height: 32px;
+  letter-spacing: 2px;
+  color: #c5c0ff;
+  margin: 0;
+}
+
+.headerActions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+/* 16-bit Bevel Effects */
+.pixelBevel {
+  box-shadow: inset 1px 1px 0px 0px #7F77DD, inset -1px -1px 0px 0px #000000;
+  transition: all 0.1s ease;
+}
+
+.pixelBevel:active {
+  box-shadow: inset -1px -1px 0px 0px #7F77DD, inset 1px 1px 0px 0px #000000;
+  transform: translateY(2px);
+}
+
+/* Profile Button */
+.profileBtn {
+  width: 48px;
+  height: 48px;
+  background-color: #201f26;
+  border: 2px solid #000;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #c5c0ff;
+}
+
+.profileBtn:hover {
+  background-color: #2a2930;
+}
+
+/* New Arena Button */
+.newArenaBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border: 2px solid #000;
+  background-color: #c5c0ff;
+  color: #28188c;
+  cursor: pointer;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 8px;
+}
+
+.newArenaBtn:hover {
+  background-color: #e3dfff;
+}
+
+.newArenaBtn span:first-child {
+  font-size: 18px;
+}
+
+/* ========================================= */
+/* MAIN CONTENT & GRID */
+/* ========================================= */
+.main {
+  flex: 1;
+  padding: 0 24px 80px 24px;
+  box-sizing: border-box;
+}
+
+.gridHeader {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.gridHeaderIcon {
+  color: #ffb77d;
+  font-size: 24px;
+}
+
+.gridHeaderTitle {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 18px;
+  line-height: 24px;
+  color: #e5e1eb;
+  margin: 0;
+}
+
+/* Grid Section with proper spacing between cards */
+.gridSection {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px; /* Margin between cards on mobile */
+}
+
+@media (min-width: 768px) {
+  .gridSection {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px; /* Margin between cards on tablet */
+  }
+}
+
+@media (min-width: 1024px) {
+  .gridSection {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px; /* Margin between cards on desktop */
+  }
+}
+
+/* ========================================= */
+/* STATE CONTAINERS (Loading / Empty) */
+/* ========================================= */
+.stateContainer {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #c8c4d5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  grid-column: 1 / -1;
+}
+
+.stateIcon {
+  font-size: 48px;
+  opacity: 0.5;
+  color: #c5c0ff;
+}
+
+.stateTitle {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 14px;
+  margin: 0;
+  color: #e5e1eb;
+}
+
+.stateSubtitle {
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 14px;
+  margin: 0;
+  opacity: 0.7;
+}
+
+/* ========================================= */
+/* MOBILE RESPONSIVE */
+/* ========================================= */
+@media (max-width: 767px) {
+  .header {
+    padding: 16px;
+  }
+  
+  .headerTitle {
+    font-size: 16px;
+    line-height: 24px;
+  }
+  
+  .main {
+    padding: 0 16px 60px 16px;
+  }
+  
+  .gridHeader {
+    margin-bottom: 24px;
+  }
+  
+  .gridHeaderTitle {
+    font-size: 14px;
+    line-height: 20px;
+  }
+  
+  /* Hide button text on very small screens to prevent overflow */
+  .newArenaBtn span:last-child {
+    display: none; 
+  }
+  
+  .newArenaBtn {
+    padding: 8px;
+  }
+}

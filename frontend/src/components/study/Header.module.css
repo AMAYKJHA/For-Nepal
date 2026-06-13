@@ -1,0 +1,49 @@
+.header {
+  height: 54px !important;
+  min-height: 54px !important;
+  flex-shrink: 0 !important;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  display: flex !important;
+  align-items: center !important;
+  padding: 0 20px;
+  gap: 14px;
+  box-shadow: 0 1px 8px rgba(108,92,231,0.05);
+}
+
+
+.toggleBtn {
+  background: none; border: none;
+  color: var(--text-7); cursor: pointer;
+  font-size: 18px; display: flex; align-items: center;
+  padding: 5px 6px; border-radius: 7px;
+  transition: color 0.15s, background 0.15s;
+}
+.toggleBtn:hover { color: #7c6af7; background: var(--hover); }
+
+.title {
+  font-size: 15px; font-weight: 600; color: var(--text-3);
+  flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+.themeBtn {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 9px; padding: 6px 10px;
+  color: var(--text-5); cursor: pointer;
+  font-size: 15px; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+}
+.themeBtn:hover { background: var(--hover); color: #7c6af7; }
+
+.newChatBtn {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 9px; padding: 6px 16px;
+  color: #7c6af7; cursor: pointer;
+  font-size: 13.5px; font-weight: 600;
+  display: flex; align-items: center; gap: 6px;
+  transition: all 0.15s;
+}
+.newChatBtn:hover { background: var(--border); }

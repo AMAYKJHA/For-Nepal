@@ -1,0 +1,711 @@
+/* Import Fonts and Icons */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=JetBrains+Mono:wght@400;600&family=Hanken+Grotesk:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
+
+/* Base Body Styles */
+.body {
+  background-color: #131319;
+  color: #e5e1eb;
+  image-rendering: pixelated;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow-x: hidden;
+  padding: 24px;
+  position: relative;
+  font-family: 'Hanken Grotesk', sans-serif;
+}
+
+/* Global Background Runes */
+.bgRunes {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.1;
+}
+
+.rune {
+  position: absolute;
+  color: #c5c0ff;
+  opacity: 0.5;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 64px;
+}
+
+.rune1 { top: 40px; left: 40px; }
+.rune2 { bottom: 80px; right: 80px; }
+.rune3 { top: 50%; left: 80px; }
+
+/* Main Container */
+.main {
+  width: 100%;
+  max-width: 896px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 10;
+}
+
+/* Header Styles */
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.5rem;
+  margin-bottom: 4rem;
+  position: relative;
+  width: 100%;
+}
+
+.logoWrapper {
+  position: relative;
+  width: 8rem;
+  height: 8rem;
+  animation: float 4s ease-in-out infinite;
+}
+
+.logoImg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.headerText {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.title {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 24px;
+  line-height: 32px;
+  letter-spacing: 8px;
+  color: #c5c0ff;
+  margin: 0;
+}
+
+.subtitle {
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 18px;
+  line-height: 28px;
+  font-weight: 500;
+  color: #c8c4d5;
+  max-width: 32rem;
+  margin: 0;
+}
+
+/* Modes Section Grid */
+.modesSection {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  width: 100%;
+  padding: 0 1rem;
+}
+
+/* Mode Card (Play/Study) */
+.modeCard {
+  position: relative;
+  height: 16rem;
+  background-color: #201f26;
+  border: 2px solid #474553;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.modeCard:hover {
+  transform: translateY(-4px);
+  background-color: #26215C;
+  border-color: #c5c0ff;
+  box-shadow: 0 0 15px rgba(197, 192, 255, 0.3);
+}
+
+.modeCard:active {
+  transform: translateY(0);
+  box-shadow: inset 4px 4px 0px rgba(0, 0, 0, 0.5);
+}
+
+/* Corner Ornaments */
+.corner {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background-color: #c5c0ff;
+}
+
+.topLeft { top: 0; left: 0; }
+.topRight { top: 0; right: 0; }
+.bottomLeft { bottom: 0; left: 0; }
+.bottomRight { bottom: 0; right: 0; }
+
+/* Card Content */
+.cardIcon {
+  font-size: 60px;
+  color: #c5c0ff;
+  transition: transform 0.2s ease;
+}
+
+.modeCard:hover .cardIcon {
+  transform: scale(1.1);
+}
+
+.cardText {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cardTitle {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 18px;
+  line-height: 24px;
+  color: #e5e1eb;
+  transition: color 0.2s ease;
+}
+
+.modeCard:hover .cardTitle {
+  color: #c5c0ff;
+}
+
+.cardHoverText {
+  position: absolute;
+  bottom: 1rem;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.modeCard:hover .cardHoverText {
+  opacity: 1;
+}
+
+.cardHoverText span {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  line-height: 16px;
+  letter-spacing: 1px;
+  font-weight: 600;
+  color: #c5c0ff;
+}
+
+/* Footer */
+.footer {
+  margin-top: 6rem;
+  text-align: center;
+}
+
+.footerText {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  line-height: 16px;
+  font-weight: 600;
+  color: #c8c4d5;
+  opacity: 0.7;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+/* Vignette Overlay */
+.vignette {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  background: radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.4) 100%);
+}
+
+/* Floating Animation */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* ========================================= */
+/* LOADING STATE */
+/* ========================================= */
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  min-height: 100vh;
+}
+
+.loadingSpinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid #201f26;
+  border-top-color: #c5c0ff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loadingText {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 14px;
+  color: #c5c0ff;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* ========================================= */
+/* USER SECTION (TOP RIGHT) */
+/* ========================================= */
+.userSection {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  z-index: 20;
+}
+
+/* Login Button */
+.loginButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #534ab7;
+  color: #d1ccff;
+  border: 2px solid #000;
+  padding: 0.75rem 1.5rem;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 
+    inset 2px 2px 0 0 #7F77DD,
+    inset -2px -2px 0 0 #000,
+    0 0 0 4px #000;
+}
+
+.loginButton:hover {
+  background-color: #c5c0ff;
+  color: #28188c;
+}
+
+.loginButton:active {
+  transform: translateY(2px);
+  box-shadow: 
+    inset -2px -2px 0 0 #7F77DD,
+    inset 2px 2px 0 0 #000,
+    0 0 0 4px #000;
+}
+
+.loginButton span {
+  font-size: 18px;
+}
+
+/* User Profile */
+.userProfile {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background-color: rgba(32, 31, 38, 0.9);
+  border: 2px solid #474553;
+  padding: 0.5rem 1rem;
+  box-shadow: 0 0 0 4px #000;
+}
+
+.userAvatar {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #c5c0ff;
+}
+
+.userAvatar span {
+  font-size: 32px;
+}
+
+.userName {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  font-weight: 600;
+  color: #c5c0ff;
+}
+
+.logoutButton {
+  background: transparent;
+  border: none;
+  color: #928f9e;
+  cursor: pointer;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+}
+
+.logoutButton:hover {
+  color: #ffb4ab;
+}
+
+.logoutButton span {
+  font-size: 20px;
+}
+
+/* ========================================= */
+/* TABLET RESPONSIVE (768px - 1024px) */
+/* ========================================= */
+@media (min-width: 768px) {
+  .modesSection {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ========================================= */
+/* MOBILE RESPONSIVE (max-width: 767px) */
+/* ========================================= */
+@media (max-width: 767px) {
+  .body {
+    padding: 16px;
+    justify-content: flex-start;
+    padding-top: 80px;
+  }
+
+  /* Hide background runes on mobile for performance */
+  .bgRunes {
+    display: none;
+  }
+
+  .header {
+    margin-bottom: 2rem;
+    gap: 1rem;
+  }
+
+  .logoWrapper {
+    width: 5rem;
+    height: 5rem;
+  }
+
+  .title {
+    font-size: 16px;
+    line-height: 22px;
+    letter-spacing: 4px;
+  }
+
+  .subtitle {
+    font-size: 14px;
+    line-height: 22px;
+  }
+
+  .modesSection {
+    gap: 1.5rem;
+    padding: 0;
+  }
+
+  .modeCard {
+    height: 12rem;
+    gap: 0.75rem;
+  }
+
+  .cardIcon {
+    font-size: 48px;
+  }
+
+  .cardTitle {
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .cardHoverText {
+    display: none; /* Hide hover text on mobile */
+  }
+
+  .footer {
+    margin-top: 3rem;
+  }
+
+  .footerText {
+    font-size: 12px;
+  }
+
+  /* User Section - Top Right on Mobile */
+  .userSection {
+    top: 16px;
+    right: 16px;
+  }
+
+  .userName {
+    display: none; /* Hide username on mobile, show only avatar */
+  }
+
+  .userProfile {
+    padding: 0.4rem;
+    gap: 0.5rem;
+  }
+
+  .userAvatar {
+    width: 28px;
+    height: 28px;
+  }
+
+  .userAvatar span {
+    font-size: 28px;
+  }
+
+  .logoutButton span {
+    font-size: 18px;
+  }
+
+  .loginButton {
+    padding: 0.5rem 1rem;
+    font-size: 10px;
+    gap: 0.4rem;
+  }
+
+  .loginButton span {
+    font-size: 16px;
+  }
+
+  /* Loading State */
+  .loadingText {
+    font-size: 12px;
+  }
+
+  .loadingSpinner {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* ========================================= */
+/* SMALL MOBILE (max-width: 480px) */
+/* ========================================= */
+@media (max-width: 480px) {
+  .body {
+    padding: 12px;
+    padding-top: 70px;
+  }
+
+  .header {
+    margin-bottom: 1.5rem;
+  }
+
+  .logoWrapper {
+    width: 4rem;
+    height: 4rem;
+  }
+
+  .title {
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 3px;
+  }
+
+  .subtitle {
+    font-size: 13px;
+    line-height: 20px;
+  }
+
+  .modesSection {
+    gap: 1rem;
+  }
+
+  .modeCard {
+    height: 10rem;
+    gap: 0.5rem;
+  }
+
+  .cardIcon {
+    font-size: 40px;
+  }
+
+  .cardTitle {
+    font-size: 12px;
+    line-height: 18px;
+  }
+
+  .corner {
+    width: 6px;
+    height: 6px;
+  }
+
+  .footer {
+    margin-top: 2rem;
+  }
+
+  .footerText {
+    font-size: 10px;
+    letter-spacing: 1px;
+  }
+
+  .userSection {
+    top: 12px;
+    right: 12px;
+  }
+
+  .loginButton {
+    padding: 0.4rem 0.8rem;
+    font-size: 9px;
+  }
+
+  .userProfile {
+    padding: 0.3rem;
+  }
+
+  .userAvatar {
+    width: 24px;
+    height: 24px;
+  }
+
+  .userAvatar span {
+    font-size: 24px;
+  }
+
+  .logoutButton span {
+    font-size: 16px;
+  }
+}
+
+/* ========================================= */
+/* VERY SMALL MOBILE (max-width: 360px) */
+/* ========================================= */
+@media (max-width: 360px) {
+  .title {
+    font-size: 12px;
+    line-height: 18px;
+    letter-spacing: 2px;
+  }
+
+  .subtitle {
+    font-size: 12px;
+    line-height: 18px;
+  }
+
+  .modeCard {
+    height: 9rem;
+  }
+
+  .cardIcon {
+    font-size: 36px;
+  }
+
+  .cardTitle {
+    font-size: 11px;
+    line-height: 16px;
+  }
+
+  .loginButton {
+    padding: 0.3rem 0.6rem;
+    font-size: 8px;
+  }
+}
+
+/* ========================================= */
+/* LANDSCAPE MOBILE */
+/* ========================================= */
+@media (max-height: 500px) and (orientation: landscape) {
+  .body {
+    padding-top: 60px;
+  }
+
+  .logoWrapper {
+    width: 4rem;
+    height: 4rem;
+  }
+
+  .header {
+    margin-bottom: 1rem;
+    gap: 0.5rem;
+  }
+
+  .title {
+    font-size: 14px;
+  }
+
+  .subtitle {
+    font-size: 12px;
+  }
+
+  .modeCard {
+    height: 8rem;
+  }
+
+  .footer {
+    margin-top: 1.5rem;
+  }
+}
+
+/* ========================================= */
+/* TOUCH DEVICE OPTIMIZATIONS */
+/* ========================================= */
+@media (hover: none) and (pointer: coarse) {
+  .modeCard:hover {
+    transform: none; /* Disable hover effects on touch devices */
+  }
+
+  .modeCard:active {
+    transform: scale(0.98);
+    background-color: #26215C;
+    border-color: #c5c0ff;
+  }
+
+  .loginButton:hover {
+    background-color: #534ab7;
+    color: #d1ccff;
+  }
+
+  .loginButton:active {
+    background-color: #c5c0ff;
+    color: #28188c;
+  }
+}
+
+/* ========================================= */
+/* HIGH DPI DISPLAYS */
+/* ========================================= */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .body {
+    image-rendering: -webkit-optimize-contrast;
+  }
+}
+
+/* ========================================= */
+/* DARK MODE PREFERENCES (already dark, but for consistency) */
+/* ========================================= */
+@media (prefers-color-scheme: dark) {
+  .body {
+    background-color: #131319;
+  }
+}
+
+/* ========================================= */
+/* REDUCED MOTION PREFERENCES */
+/* ========================================= */
+@media (prefers-reduced-motion: reduce) {
+  .logoWrapper,
+  .loadingSpinner,
+  .loadingText {
+    animation: none;
+  }
+
+  .modeCard,
+  .loginButton,
+  .cardIcon,
+  .cardTitle {
+    transition: none;
+  }
+}

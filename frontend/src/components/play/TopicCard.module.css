@@ -1,0 +1,79 @@
+/* components/play/TopicCard.module.css */
+
+.topicCard {
+  background-color: #2a2930;
+  border: 2px solid #000;
+  box-shadow: inset 1px 1px 0px 0px #7F77DD, inset -1px -1px 0px 0px #000000;
+  display: flex;
+  flex-direction: column;
+  transition: background-color 0.2s, transform 0.1s;
+  overflow: hidden;
+  border-radius: 16px; /* Rounded corners for the main card */
+}
+
+.topicCard:hover {
+  background-color: #393840;
+}
+
+.topicCard:active {
+  transform: translateY(2px);
+}
+
+/* Card Top (Image/Title Area) */
+.cardTop {
+  aspect-ratio: 16 / 9;
+  background-color: #131319;
+  margin: 16px;
+  border: 1px solid #474553;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 12px; /* Rounded corners for the inner rectangle */
+}
+
+.cardTopPattern {
+  position: absolute;
+  inset: 0;
+  opacity: 0.1;
+  background-image: radial-gradient(#534ab7 1px, transparent 1px);
+  background-size: 10px 10px;
+}
+
+.cardTopTitle {
+  position: relative;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 18px;
+  line-height: 24px;
+  color: #c5c0ff;
+  text-shadow: 0 2px 0 rgba(0,0,0,1);
+  text-align: center;
+  padding: 0 16px;
+  z-index: 1;
+}
+
+/* Card Bottom (Status Area) */
+.cardBottom {
+  padding: 16px;
+  background-color: #201f26;
+  border-top: 2px solid #000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+}
+
+.cardStatus {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  line-height: 16px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: #c8c4d5;
+}
+
+.cardPlayIcon {
+  color: #c5c0ff;
+  font-size: 24px;
+}

@@ -1,0 +1,276 @@
+/* Layout & Workspace Frame */
+.appShell {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  background: var(--bg);
+  overflow: hidden;
+}
+
+.mainCanvas {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+}
+
+.workspaceViewport {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.viewFallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-size: 1.1rem;
+  color: var(--text-4);
+  font-weight: 500;
+}
+
+/* Sidebar Component Styling */
+.sidebar {
+  width: 264px;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  box-shadow: 2px 0 16px rgba(108, 92, 231, 0.04);
+}
+
+.sidebarHeader {
+  padding: 18px 16px 14px;
+  border-bottom: 1px solid var(--hover);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logoGroup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logoIcon {
+  width: 34px;
+  height: 34px;
+  background: linear-gradient(135deg, #7c6af7 0%, #3ecfcf 100%);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 800;
+  color: #fff;
+  box-shadow: 0 2px 10px rgba(124, 106, 247, 0.3);
+}
+
+.logoText {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-1);
+  letter-spacing: -0.4px;
+  line-height: 1;
+}
+
+.logoSubtext {
+  font-size: 11px;
+  color: var(--text-6);
+  margin-top: 2px;
+}
+
+/* Scrollable Session Container */
+.sessionsContainer {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+.groupWrapper {
+  margin-bottom: 14px;
+}
+
+.groupHeading {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--text-6);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  padding: 0 8px 6px;
+  display: block;
+}
+
+.sessionItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-bottom: 2px;
+  transition: background 0.15s ease-out;
+}
+
+.sessionItem:hover {
+  background: var(--hover);
+}
+
+.sessionItemActive {
+  background: var(--border);
+}
+
+.sessionTitle {
+  font-size: 13px;
+  color: var(--text-4);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+}
+
+.sessionTitleActive {
+  color: #6c5ce7;
+  font-weight: 600;
+}
+
+.deleteBtn {
+  background: transparent;
+  border: none;
+  font-size: 11px;
+  color: var(--text-7);
+  cursor: pointer;
+  padding: 2px 6px;
+  opacity: 0;
+  transition: opacity 0.1s ease, color 0.1s ease;
+}
+
+.sessionItem:hover .deleteBtn {
+  opacity: 1;
+}
+
+.deleteBtn:hover {
+  color: #f87171;
+}
+
+/* Bottom Navigation Actions */
+.sidebarFooter {
+  padding: 12px 10px 16px;
+  border-top: 1px solid var(--hover);
+}
+
+.navBtn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 9px 12px;
+  border-radius: 10px;
+  color: var(--text-3);
+  font-size: 14px;
+  text-decoration: none;
+  margin-bottom: 3px;
+  transition: all 0.15s ease;
+}
+
+.navBtn:hover {
+  background: var(--hover);
+  color: #6c5ce7;
+}
+
+.navBtnActive {
+  background: var(--border);
+  color: #6c5ce7;
+  font-weight: 500;
+}
+
+/* Header Elements */
+.headerBar {
+  height: 54px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  box-shadow: 0 1px 8px rgba(108, 92, 231, 0.02);
+}
+
+.sidebarToggle {
+  background: none;
+  border: none;
+  color: var(--text-4);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+
+.sidebarToggle:hover {
+  background: var(--hover);
+  color: #7c6af7;
+}
+
+.headerTitle {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-2);
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.themeToggle {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  width: 34px;
+  height: 34px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+
+.themeToggle:hover {
+  background: var(--hover);
+}
+
+.iconActionBtn {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: #7c6af7;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.actionButtonPrimary {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 14px;
+  color: #7c6af7;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.15s;
+}
+
+.actionButtonPrimary:hover {
+  background: var(--border);
+}
