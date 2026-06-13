@@ -1,11 +1,14 @@
 from rest_framework import serializers
-from .models import Memory, Flashcard, ChatSession, ChatMessage
+from .models import Memory, Flashcard, ChatSession, ChatMessage, TopicMastery
 
 
 class MemorySerializer(serializers.ModelSerializer):
     class Meta:
         model  = Memory
-        fields = ['id', 'question', 'answer', 'topic', 'summary', 'created_at']
+        fields = [
+            'id', 'question', 'answer', 'topic', 'summary',
+            'importance_score', 'learning_progress', 'created_at',
+        ]
         read_only_fields = ['id', 'created_at']
 
 
@@ -14,7 +17,11 @@ class FlashcardSerializer(serializers.ModelSerializer):
 
     class Meta:
         model  = Flashcard
-        fields = ['id', 'memory_id', 'front', 'back', 'topic', 'created_at']
+        fields = [
+            'id', 'memory_id', 'front', 'back', 'topic',
+            'ease_factor', 'interval_days', 'repetition_count',
+            'next_review_date', 'last_review_date', 'created_at',
+        ]
         read_only_fields = ['id', 'created_at']
 
 
@@ -36,6 +43,7 @@ class ChatRequestSerializer(serializers.Serializer):
     message              = serializers.CharField()
     conversation_history = serializers.ListField(child=serializers.DictField(), required=False, default=[])
     image_base64         = serializers.CharField(required=False, allow_null=True)
+    tutor_mode           = serializers.BooleanField(required=False, default=False)
 
 
 class SearchRequestSerializer(serializers.Serializer):
@@ -44,3 +52,14 @@ class SearchRequestSerializer(serializers.Serializer):
 
 class SummarizeRequestSerializer(serializers.Serializer):
     memory_id = serializers.UUIDField()
+
+
+class ReviewSubmitSerializer(serializers.Serializer):
+    flashcard_id = serializers.UUIDField()
+    difficulty = serializers.ChoiceField(choices=['again', 'hard', 'good', 'easy'])
+
+
+class TopicMasterySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TopicMastery
+        fields = ['topic', 'mastery_score', 'correct_answers', 'incorrect_answers', 'last_updated']
