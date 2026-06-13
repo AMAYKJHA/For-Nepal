@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Topic, GameSession
+from .models import Topic, GameSession, QuestionAttempt
 
 
 class TopicSerializer(serializers.ModelSerializer):
@@ -69,4 +69,32 @@ class GameSessionStateUpdateSerializer(serializers.Serializer):
             raise serializers.ValidationError(
                 "At least one state field is required: current_level, player_hp, enemy_hp, score, status."
             )
+        return attrs
+
+
+class QuestionAttemptSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = QuestionAttempt
+        fields = [
+            "id",
+            "session_id",
+            "question_id",
+            "difficulty",
+            "chosen_index",
+            "correct_index",
+            "is_correct",
+            "answered_at",
+        ]
+
+
+class QuestionAttemptCreateSerializer(serializers.Serializer):
+    question_id = serializers.IntegerField(min_value=1)
+    difficulty = serializers.ChoiceField(choices=[choice[0] for choice in QuestionAttempt.DIFFICULTY_CHOICES])
+    chosen_index = serializers.IntegerField(min_value=0)
+    correct_index = serializers.IntegerField(min_value=0)
+
+    def validate(self, attrs):
+        # Keep consistency with 4-choice quiz format.
+        if attrs["chosen_index"] > 3 or attrs["correct_index"] > 3:
+            raise serializers.ValidationError("chosen_index and correct_index must be between 0 and 3.")
         return attrs
