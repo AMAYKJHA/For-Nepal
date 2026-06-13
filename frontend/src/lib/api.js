@@ -1,6 +1,6 @@
 // src/lib/api.js
 
-const API_BASE = 'https://fornepal.onrender.com/api'; // Update with your actual backend URL
+const API_BASE = process.env.NEXT_PUBLIC_API_URL;
 
 function getUserId() {
   if (typeof window === 'undefined') return null;

@@ -8,7 +8,7 @@ import {
 } from 'recharts';
 import styles from './Dashboard.module.css';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+const API_BASE = process.env.NEXT_PUBLIC_API_URL;
 
 const TOPIC_COLORS = {
   Algorithms: '#059669', Programming: '#2563eb',

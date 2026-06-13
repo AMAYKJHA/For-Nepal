@@ -1,7 +1,6 @@
 import axios from 'axios';
 
-// In Next.js, client-side environment variables must be prefixed with NEXT_PUBLIC_
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://fornepal.onrender.com/api/chat';
+const API_BASE = process.env.NEXT_PUBLIC_API_URL;
 
 const api = axios.create({
   baseURL: API_BASE,

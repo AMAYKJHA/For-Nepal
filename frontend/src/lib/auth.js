@@ -2,7 +2,7 @@ const AUTH_TOKEN_KEY = 'scholar_auth_token';
 const USER_DATA_KEY = 'scholar_user_data';
 const USER_ID_KEY = 'scholar_user_id';
 
-const API_BASE = 'https://fornepal.onrender.com/api';
+const API_BASE = process.env.NEXT_PUBLIC_API_URL;
 
 export function isLoggedIn() {
   if (typeof window === 'undefined') return false;
