@@ -1,6 +1,9 @@
+import os
 import re
 import json
-import fitz 
+import fitz # 
+from datetime import timedelta
+from django.utils import timezone
 
 from google import genai
 from groq import Groq
@@ -281,15 +284,19 @@ def generate_quiz_for_level(
         f"Document text:\n\n{full_text[:10000]}\n\n"
         f"Task: {level_instruction}"
     )
- 
-    response = groq_client.chat.completions.create(
-        model=model,
-        messages=[
-            {"role": "system", "content": system},
-            {"role": "user", "content": user_content},
-        ],
-        max_tokens=2000,
-    )
+    
+    try:
+        response = groq_client.chat.completions.create(
+            model=model,
+            messages=[
+                {"role": "system", "content": system},
+                {"role": "user", "content": user_content},
+            ],
+            max_tokens=2000,
+        )
+    except Exception as e:
+        print(f'Quiz generation error: {e}')
+        return []
  
     raw = response.choices[0].message.content.strip()
     # strip accidental markdown fences
@@ -298,4 +305,76 @@ def generate_quiz_for_level(
  
     questions = json.loads(raw)
     return questions
+
+
+def sm2_schedule(flashcard, quality: int) -> dict:
+    """Apply SM-2 scheduling and return the next state fields."""
+    ease_factor = float(flashcard.ease_factor)
+    repetition_count = int(flashcard.repetition_count)
+    interval_days = int(flashcard.interval_days)
+
+    if quality < 3:
+        repetition_count = 0
+        interval_days = 1
+    else:
+        if repetition_count == 0:
+            interval_days = 1
+        elif repetition_count == 1:
+            interval_days = 6
+        else:
+            interval_days = max(1, round(interval_days * ease_factor))
+        repetition_count += 1
+
+    ease_factor = ease_factor + (0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02))
+    ease_factor = max(1.3, ease_factor)
+
+    today = timezone.localdate()
+    next_review_date = today + timedelta(days=interval_days)
+    return {
+        'ease_factor': round(ease_factor, 2),
+        'interval_days': interval_days,
+        'repetition_count': repetition_count,
+        'last_review_date': today,
+        'next_review_date': next_review_date,
+    }
+
+
+def mastery_from_counts(correct: int, incorrect: int) -> float:
+    total = correct + incorrect
+    if total == 0:
+        return 0.0
+    # Keep a confidence penalty for low sample sizes.
+    accuracy = correct / total
+    confidence = min(1.0, total / 20)
+    return round(accuracy * confidence * 100, 2)
+
+
+def extract_learning_structure(full_text: str) -> dict:
+    try:
+        response = groq_client.chat.completions.create(
+            model=MODELS[DEFAULT_MODEL]['id'],
+            messages=[
+                {
+                    'role': 'system',
+                    'content': (
+                        'Extract learning structure from study text. '
+                        'Return only valid JSON with keys: concepts (array of strings), '
+                        'definitions (array of {term, definition}), '
+                        'relationships (array of {from, to, relation}).'
+                    ),
+                },
+                {'role': 'user', 'content': full_text[:10000]},
+            ],
+            max_tokens=1000,
+            temperature=0.2,
+        )
+        raw = response.choices[0].message.content.strip().replace('```json', '').replace('```', '').strip()
+        data = json.loads(raw)
+        return {
+            'concepts': data.get('concepts', []),
+            'definitions': data.get('definitions', []),
+            'relationships': data.get('relationships', []),
+        }
+    except Exception:
+        return {'concepts': [], 'definitions': [], 'relationships': []}
  

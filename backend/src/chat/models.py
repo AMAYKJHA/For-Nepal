@@ -1,6 +1,7 @@
 from django.db import models
 from pgvector.django import VectorField
 import uuid
+from django.utils import timezone
 
 from django.contrib.auth.models import User
 
@@ -12,6 +13,8 @@ class Memory(models.Model):
     answer     = models.TextField()
     topic      = models.CharField(max_length=100, default='General')
     summary    = models.TextField(blank=True, null=True)
+    importance_score = models.FloatField(default=0.5)
+    learning_progress = models.JSONField(default=dict, blank=True)
     embedding  = VectorField(dimensions=3072, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -25,6 +28,11 @@ class Flashcard(models.Model):
     memory     = models.ForeignKey(Memory, on_delete=models.CASCADE, related_name='flashcards')
     front      = models.TextField()
     back       = models.TextField()
+    ease_factor = models.FloatField(default=2.5)
+    interval_days = models.IntegerField(default=0)
+    repetition_count = models.IntegerField(default=0)
+    next_review_date = models.DateField(default=timezone.localdate)
+    last_review_date = models.DateField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -67,6 +75,9 @@ class PDFDocument(models.Model):
     summary = models.TextField(blank=True)            # AI-generated summary
     page_count = models.IntegerField(default=0)
     topic = models.CharField(max_length=100, default='General')
+    concepts = models.JSONField(default=list, blank=True)
+    definitions = models.JSONField(default=list, blank=True)
+    relationships = models.JSONField(default=list, blank=True)
     mastered = models.BooleanField(default=False)
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
@@ -104,3 +115,45 @@ class PDFQuiz(models.Model):
 
     def __str__(self):
         return f"[{self.difficulty}] {self.question[:60]}"
+
+
+class ReviewLog(models.Model):
+    RATING_CHOICES = [
+        (0, 'Again'),
+        (3, 'Hard'),
+        (4, 'Good'),
+        (5, 'Easy'),
+    ]
+
+    flashcard = models.ForeignKey(Flashcard, on_delete=models.CASCADE, related_name='review_logs')
+    rating = models.IntegerField(choices=RATING_CHOICES)
+    reviewed_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'review_logs'
+        ordering = ['-reviewed_at']
+
+
+class TopicMastery(models.Model):
+    topic = models.CharField(max_length=100, unique=True)
+    mastery_score = models.FloatField(default=0.0)
+    correct_answers = models.IntegerField(default=0)
+    incorrect_answers = models.IntegerField(default=0)
+    last_updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'topic_mastery'
+        ordering = ['mastery_score', '-last_updated']
+
+
+class QuizAttempt(models.Model):
+    source = models.CharField(max_length=20, default='pdf')
+    topic = models.CharField(max_length=100, default='General')
+    score = models.FloatField(default=0.0)
+    correct = models.IntegerField(default=0)
+    total = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'quiz_attempts'
+        ordering = ['-created_at']
