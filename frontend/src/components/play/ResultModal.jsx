@@ -56,7 +56,7 @@ export default function ResultModal({ result, onContinue, onWorldMap, onMainMenu
         : `You won with no damage`)
     : `You failed in Level ${level}`;
 
-  const heroTitle = won ? 'Scholar' : 'Defeated';
+  const heroTitle = won ? `Next Level Unlocked: Level ${nextLevel}` : 'Defeated';
   const titleColor = won ? 'rgb(29, 158, 117)' : '#e74c3c';
 
   return (
@@ -105,20 +105,6 @@ export default function ResultModal({ result, onContinue, onWorldMap, onMainMenu
             </div>
           </div>
 
-          {/* ── Stars ── */}
-          <div className={styles.resultStars}>
-            {[1, 2, 3].map((n) => (
-              <span
-                key={n}
-                className={`material-symbols-outlined icon-fill ${styles.resultStar} ${
-                  n <= stars ? styles.resultStarFilled : styles.resultStarEmpty
-                } ${styles[`starAnim${n}`]}`}
-              >
-                star
-              </span>
-            ))}
-          </div>
-
           {/* ── Rewards / Status panel ── */}
           <div className={styles.resultRewardsPanel}>
             <h2 className={styles.resultRewardsHeading}>
@@ -128,7 +114,7 @@ export default function ResultModal({ result, onContinue, onWorldMap, onMainMenu
             {/* XP row */}
             <div className={styles.resultRow}>
               <span className={styles.resultLabel}>XP</span>
-              <span className={styles.resultXPValue}>{xpEarned} earned</span>
+              <span className={styles.resultXPValue}> 100 earned</span>
             </div>
 
             {/* HP progress bar (only shown if won and damage was dealt) */}

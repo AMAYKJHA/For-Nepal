@@ -58,14 +58,6 @@ const Loader = () => {
       <div className={`${styles.stepText} ${fade ? styles.fadeIn : styles.fadeOut}`}>
         {STEPS[currentStep]}
       </div>
-      
-      {/* Progress Bar */}
-      <div className={styles.progressBar}>
-        <div 
-          className={styles.progressFill} 
-          style={{ width: `${((currentStep + 1) / STEPS.length) * 100}%` }} 
-        />
-      </div>
     </div>
   );
 }

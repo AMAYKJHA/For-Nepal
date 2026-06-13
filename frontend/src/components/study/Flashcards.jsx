@@ -16,16 +16,23 @@ export default function Flashcards() {
   const [filterInput, setFilterInput] = useState('');
   const [activeFilter, setActiveFilter] = useState('');
 
-  useEffect(() => { loadFlashcards(); }, []);
 
+  // ✅ FIX 1: Moved loadFlashcards ABOVE useEffect so it is declared before it is called
   const loadFlashcards = async () => {
     setLoading(true);
     try {
       const res = await flashcardAPI.getAll();
-      setFlashcards(res.data);
-    } catch (err) { console.error(err); }
+      // Ensure we always set an array to prevent .map errors
+            // Ensure we always set an array to prevent .map errors
+      setFlashcards(Array.isArray(res.data) ? res.data : []);
+    } catch (err) { 
+      console.error(err); 
+      setFlashcards([]); // Fallback to empty array on error
+    }
     setLoading(false);
   };
+
+  useEffect(() => { loadFlashcards(); }, []);
 
   const handleGenerate = async () => {
     setGenerating(true);
@@ -33,9 +40,12 @@ export default function Flashcards() {
       const res = activeFilter
         ? await flashcardAPI.bulkGenerate({ subject: activeFilter })
         : await flashcardAPI.bulkGenerate();
-      setFlashcards(res.data);
+      setFlashcards(Array.isArray(res.data) ? res.data : []);
       setFlipped({});
-    } catch (err) { console.error(err); }
+    } catch (err) { 
+      console.error(err); 
+      setFlashcards([]);
+    }
     setGenerating(false);
   };
 
@@ -226,7 +236,10 @@ export default function Flashcards() {
         ) : visibleCards.length === 0 ? (
           <div className={styles.noMatchWrap}>
             <div className={styles.noMatchIcon}>🔎</div>
-            <div className={styles.noMatchTitle}>No cards match "{activeFilter}"</div>
+            
+            {/* ✅ FIX 2: Wrapped in {} to fix the "unescaped entities" ESLint error */}
+            <div className={styles.noMatchTitle}>{`No cards match "${activeFilter}"`}</div>
+            
             <div className={styles.noMatchSub}>
               Generate new cards specifically for this subject, or clear the filter to see all cards.
             </div>
@@ -241,7 +254,7 @@ export default function Flashcards() {
           </div>
         ) : (
           <div className={styles.grid}>
-            {visibleCards.map(fc => {
+            {Array.isArray(visibleCards) && visibleCards.map(fc => {
               const isFlipped = !!flipped[fc.id];
               return (
                 <div

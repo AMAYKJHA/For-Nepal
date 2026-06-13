@@ -59,7 +59,7 @@
   transform: translateX(-50%);
   border-width: 14px 10px 0 10px;
   border-style: solid;
-  border-color: rgba(106, 61, 180, 0.88) transparent transparent transparent;
+  border-color: rgba(106, 61, 180, 0.5) transparent transparent transparent;
 }
 
 .questionText {
@@ -130,7 +130,7 @@
 }
 
 .circleBtn:hover:not(:disabled) {
-  background: rgba(140, 80, 255, 0.92);
+  background: rgba(140, 80, 255, 0.6);
   border-color: #f0c040;
   transform: scale(1.12);
   box-shadow: 0 0 22px rgba(240, 192, 64, 0.55);
@@ -152,44 +152,55 @@
   cursor: not-allowed;
 }
 
-/* ── Bottom option pill buttons ───────────────────────────────────── */
+/* ── Bottom option buttons (1x4 Horizontal Row) ─────────────── */
 .optionRow {
   position: absolute;
-  bottom: 3%;
+  bottom: 3%; 
   left: 50%;
   transform: translateX(-50%);
-  display: flex;
-  gap: 14px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); 
   pointer-events: all;
-  width: 78%;
-  justify-content: center;
+  width: 94%;
+  max-width: 1400px;
+  z-index: 55;
 }
 
 .optionBtn {
-  flex: 1;
-  max-width: 240px;
-  padding: 13px 18px;
-  border-radius: 40px;
+  min-width: auto;
+  padding: 14px 12px;
+  border-radius: 14px;
   border: 2px solid rgba(180, 130, 255, 0.65);
-  background: rgba(90, 50, 160, 0.78);
+  background: rgba(90, 50, 160, 0.65);
   color: #ffffff;
-  font-size: 15px;
+  
+  /* ✅ Adjusted for 4 columns */
+  font-size: 14px; /* Slightly smaller to fit narrow columns */
   font-family: 'Georgia', serif;
   cursor: pointer;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 10px;
+  
   transition: background 0.18s, border-color 0.18s, transform 0.15s, box-shadow 0.18s;
-  box-shadow: 0 0 14px rgba(140, 80, 255, 0.35);
-  backdrop-filter: blur(4px);
-  white-space: nowrap;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3), 0 0 14px rgba(140, 80, 255, 0.35);
+  backdrop-filter: blur(6px);
+  
+  /* ✅ Crucial for long text wrapping */
+  white-space: normal; 
+  text-align: left;
+  line-height: 1.4;
+  min-height: auto; /* Gives buttons enough height for 2-3 lines of text */
+  word-wrap: break-word;
+
+  margin-right: 3px;;
 }
 
 .optionBtn:hover:not(:disabled) {
-  background: rgba(140, 80, 255, 0.92);
+  background: rgba(140, 80, 255, 0.95);
   border-color: #f0c040;
-  transform: translateY(-3px);
-  box-shadow: 0 0 24px rgba(240, 192, 64, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4), 0 0 24px rgba(240, 192, 64, 0.5);
 }
 
 .optionBtn:active:not(:disabled) {
@@ -197,31 +208,44 @@
 }
 
 .optionSelected {
-  background: rgba(240, 192, 64, 0.85) !important;
+  background: rgba(240, 192, 64, 0.9) !important;
   border-color: #f0c040 !important;
   box-shadow: 0 0 28px rgba(240, 192, 64, 0.65) !important;
   color: #1a0a00 !important;
 }
 
 .optionBtn:disabled {
-  opacity: 0.5;
+  opacity: 0.6;
   cursor: not-allowed;
 }
 
-/* Label badge (A / B / C / D) inside pill */
+/* ✅ Smaller badge to save horizontal space for the text */
 .optionLabel {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 26px;
-  height: 26px;
+  width: 24px; 
+  height: 24px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.18);
-  font-size: 13px;
+  background: rgba(255, 255, 255, 0.2);
+  font-size: 12px;
   font-weight: bold;
   flex-shrink: 0;
   border: 1px solid rgba(255,255,255,0.3);
+  margin-top: 2px;
 }
+
+.optionSelected .optionLabel {
+  background: rgba(0, 0, 0, 0.15);
+  color: #1a0a00;
+  border-color: rgba(0,0,0,0.2);
+}
+
+.optionText {
+  flex: 1;
+  padding-top: 2px;
+}
+
 
 /* ── XP Earned Display ───────────────────────────────────────────── */
 .xpOverlay {

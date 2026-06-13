@@ -1,6 +1,6 @@
 // src/lib/api.js
 
-const API_BASE = 'https://fornepal.onrender.com/api'; // Update with your actual backend URL
+const API_BASE = 'https://fornepal.onrender.com/api' || 'https://qjwt3hh8-8000.euw.devtunnels.ms/api/'; // Update with your actual backend URL
 
 function getUserId() {
   if (typeof window === 'undefined') return null;

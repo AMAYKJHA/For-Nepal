@@ -1,0 +1,260 @@
+/* StreakCard.module.css */
+
+.card {
+  background: #ffffff;
+  border: 1px solid #e1e4e8;
+  border-radius: 6px;
+  padding: 16px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  max-width: 100%;
+  width: 150%;
+  overflow-x: auto;
+  height: 30%;
+  min-height: 20%;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.cardTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: #24292e;
+  margin: 0;
+}
+
+.cardSubtitle {
+  font-size: 12px;
+  color: #586069;
+  margin-top: 2px;
+}
+
+.graphContainer {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 8px 0;
+  margin-bottom: 12px;
+  scrollbar-width: thin;
+  scrollbar-color: #888 #f1f1f1;
+}
+
+.graphContainer::-webkit-scrollbar {
+  height: 8px;
+}
+
+.graphContainer::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.graphContainer::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.graphContainer::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.graph {
+  display: flex;
+  gap: 3px;
+  min-width: fit-content;
+  padding-left: 25px; /* Space for day labels */
+}
+
+.weekColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 10px;
+}
+
+.monthLabels {
+  display: flex;
+  gap: 3px;
+  margin-bottom: 4px;
+  font-size: 10px;
+  color: #586069;
+  min-width: fit-content;
+  padding-left: 25px; /* Align with graph */
+}
+
+.monthLabel {
+  flex: 1;
+  min-width: 40px; /* Ensure enough space for month names */
+  text-align: left;
+}
+
+.dayCell {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+
+.dayCell:hover {
+  transform: scale(1.2);
+  outline: 1px solid rgba(0, 0, 0, 0.15);
+  z-index: 10;
+}
+
+/* Contribution levels - Yellow to Red gradient */
+.dayCell.level0 {
+  background-color: #ebedf0;
+}
+
+.dayCell.level1 {
+  background-color: #fff59d; /* Light Yellow */
+}
+
+.dayCell.level2 {
+  background-color: #ffd54f; /* Yellow */
+}
+
+.dayCell.level3 {
+  background-color: #ffb74d; /* Orange */
+}
+
+.dayCell.level4 {
+  background-color: #e53935; /* Red */
+}
+
+/* Legend */
+.legend {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  font-size: 11px;
+  color: #586069;
+  margin-top: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.legendLabel {
+  margin-right: 4px;
+}
+
+.legendBox {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+
+/* Tooltip */
+.tooltip {
+  position: absolute;
+  background: #24292e;
+  color: #ffffff;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 1000;
+  transform: translate(-50%, -100%);
+  margin-top: -8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-top-color: #24292e;
+}
+
+/* Stats Section */
+.statsSection {
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid #e1e4e8;
+  padding-top: 16px;
+  margin-top: 8px;
+  gap: 16px;
+}
+
+.statItem {
+  text-align: center;
+  flex: 1;
+  min-width: 120px;
+}
+
+.statValue {
+  font-size: 24px;
+  font-weight: 700;
+  color: #24292e;
+  line-height: 1.2;
+}
+
+.statLabel {
+  font-size: 12px;
+  color: #586069;
+  margin-top: 4px;
+}
+
+.statDateRange {
+  font-size: 11px;
+  color: #959da5;
+  margin-top: 2px;
+}
+
+/* Day labels (Mon, Wed, Fri) */
+.dayLabels {
+  position: absolute;
+  left: 0;
+  top: 24px; /* Account for month labels */
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 10px;
+  color: #586069;
+  height: 73px; /* 7 days * 10px + 6 gaps * 3px */
+  justify-content: flex-start;
+}
+
+.dayLabel {
+  height: 10px;
+  line-height: 10px;
+  text-align: right;
+  padding-right: 4px;
+}
+
+.graphWrapper {
+  position: relative;
+  min-width: fit-content;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .statsSection {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .statItem {
+    text-align: left;
+    min-width: unset;
+  }
+
+  .legend {
+    justify-content: center;
+  }
+
+  .monthLabel {
+    min-width: 30px;
+    font-size: 9px;
+  }
+}
