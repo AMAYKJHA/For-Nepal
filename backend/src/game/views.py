@@ -2,14 +2,14 @@ from datetime import timedelta
 
 from django.contrib.auth.models import User
 from django.db import transaction
-from django.db.models import Count
+from django.db.models import Count, F
 from django.db.models.functions import TruncDate
 from django.utils import timezone
 from rest_framework import status
 from rest_framework.decorators import api_view, parser_classes
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
-from .models import Topic, GameSession, QuestionAttempt
+from .models import Topic, GameSession, QuestionAttempt, UserProfile
 from .serializers import (
     TopicSerializer,
     GameSessionSerializer,
@@ -19,6 +19,16 @@ from .serializers import (
 )
 from chat.utils import extract_text_by_page
 from .utils import generate_quiz
+
+
+LEVEL_ORDER = ["easy", "medium", "hard", "expert"]
+DIFFICULTY_XP = {
+    "easy": 10,
+    "medium": 15,
+    "hard": 20,
+    "expert": 30,
+}
+LEVEL_QUESTION_COUNT = 5
 
 
 def _resolve_request_user(request):
@@ -70,6 +80,150 @@ def _resolve_upload_user(request):
     return _resolve_request_user(request)
 
 
+def _increment_user_xp(user, amount):
+    profile, _ = UserProfile.objects.get_or_create(user=user)
+
+    if amount <= 0:
+        return 0, profile.total_xp
+
+    profile.total_xp = F("total_xp") + amount
+    profile.save(update_fields=["total_xp"])
+    profile.refresh_from_db(fields=["total_xp"])
+    return amount, profile.total_xp
+
+
+def _current_correct_combo(session):
+    combo = 0
+    attempts = session.attempts.order_by("-answered_at", "-id").values_list("is_correct", flat=True)
+    for is_correct in attempts:
+        if not is_correct:
+            break
+        combo += 1
+    return combo
+
+
+def _get_current_daily_streak(user):
+    rows = (
+        QuestionAttempt.objects.filter(session__user=user, answered_at__date__lte=timezone.localdate())
+        .annotate(day=TruncDate("answered_at"))
+        .values("day")
+        .annotate(attempt_count=Count("id"))
+        .order_by("day")
+    )
+    active_days = sorted(row["day"] for row in rows if row["attempt_count"] > 0)
+    return _compute_streak(active_days)["current_streak"]
+
+
+def _streak_bonus_for_days(streak_days):
+    if streak_days >= 30:
+        return 50
+    if streak_days >= 7:
+        return 20
+    if streak_days >= 3:
+        return 10
+    return 0
+
+
+def _award_streak_bonus_if_needed(session):
+    today = timezone.localdate()
+    if session.xp_streak_bonus_awarded_on == today:
+        return 0
+
+    streak_bonus = _streak_bonus_for_days(_get_current_daily_streak(session.user))
+    if streak_bonus <= 0:
+        return 0
+
+    session.xp_streak_bonus_awarded_on = today
+    session.save(update_fields=["xp_streak_bonus_awarded_on"])
+    _increment_user_xp(session.user, streak_bonus)
+    return streak_bonus
+
+
+def _award_level_completion_bonus_if_needed(session, difficulty):
+    completed_levels = list(session.xp_completed_levels or [])
+    if difficulty in completed_levels:
+        return 0
+
+    level_attempts = QuestionAttempt.objects.filter(session=session, difficulty=difficulty)
+    answered_count = level_attempts.values("question_id").distinct().count()
+    if answered_count < LEVEL_QUESTION_COUNT:
+        return 0
+
+    completed_levels.append(difficulty)
+    session.xp_completed_levels = completed_levels
+    session.save(update_fields=["xp_completed_levels"])
+    _increment_user_xp(session.user, 15)
+    return 15
+
+
+def _award_session_completion_bonuses_if_needed(session):
+    xp_awarded = 0
+    update_fields = []
+
+    if session.status != GameSession.Status.COMPLETED:
+        return 0
+
+    if not session.xp_completion_bonus_awarded:
+        xp_awarded += 50
+        session.xp_completion_bonus_awarded = True
+        update_fields.append("xp_completion_bonus_awarded")
+
+    attempts = list(session.attempts.values_list("is_correct", flat=True))
+    if attempts:
+        correct_count = sum(1 for is_correct in attempts if is_correct)
+        accuracy = (correct_count / len(attempts)) * 100
+
+        if accuracy > 80 and not session.xp_accuracy_bonus_awarded:
+            xp_awarded += 25
+            session.xp_accuracy_bonus_awarded = True
+            update_fields.append("xp_accuracy_bonus_awarded")
+
+        if accuracy == 100 and not session.xp_perfect_run_bonus_awarded:
+            xp_awarded += 50
+            session.xp_perfect_run_bonus_awarded = True
+            update_fields.append("xp_perfect_run_bonus_awarded")
+
+    if update_fields:
+        session.save(update_fields=update_fields)
+        _increment_user_xp(session.user, xp_awarded)
+
+    return xp_awarded
+
+
+def _award_level_bonuses_from_session_state(session, previous_level):
+    xp_awarded = 0
+    completed_level_indexes = []
+
+    if session.status == GameSession.Status.COMPLETED:
+        completed_level_indexes = range(len(LEVEL_ORDER))
+    elif session.current_level > previous_level:
+        completed_level_indexes = range(previous_level, min(session.current_level, len(LEVEL_ORDER)))
+
+    for level_index in completed_level_indexes:
+        xp_awarded += _award_level_completion_bonus_if_needed(session, LEVEL_ORDER[level_index])
+
+    return xp_awarded
+
+
+def _calculate_attempt_xp(session, attempt):
+    if not attempt.is_correct:
+        return 0
+
+    xp = DIFFICULTY_XP.get(attempt.difficulty, 10)
+    combo = _current_correct_combo(session)
+
+    if combo == 3:
+        xp += 5
+    elif combo == 5:
+        xp += 10
+
+    level_attempts = QuestionAttempt.objects.filter(session=session, difficulty=attempt.difficulty)
+    if level_attempts.count() == LEVEL_QUESTION_COUNT and not level_attempts.filter(is_correct=False).exists():
+        xp += 20
+
+    return xp
+
+
 @api_view(["GET"])
 def user_topics(request, user_id):
     try:
@@ -118,6 +272,8 @@ def submit_game_state(request, session_id):
     except GameSession.DoesNotExist:
         return Response({"detail": "Game session not found."}, status=status.HTTP_404_NOT_FOUND)
 
+    previous_level = session.current_level
+
     serializer = GameSessionStateUpdateSerializer(data=request.data, partial=True)
     serializer.is_valid(raise_exception=True)
     update_data = serializer.validated_data
@@ -138,8 +294,18 @@ def submit_game_state(request, session_id):
 
     session.save(update_fields=update_fields)
 
+    xp_awarded = 0
+    xp_awarded += _award_level_bonuses_from_session_state(session, previous_level)
+    xp_awarded += _award_session_completion_bonuses_if_needed(session)
+    xp_awarded += _award_streak_bonus_if_needed(session)
+    _, total_xp = _increment_user_xp(user, 0)
+
     return Response(
-        {"session": GameSessionSerializer(session).data},
+        {
+            "session": GameSessionSerializer(session).data,
+            "xp_awarded": xp_awarded,
+            "total_xp": total_xp,
+        },
         status=status.HTTP_200_OK,
     )
 
@@ -150,39 +316,52 @@ def save_question_attempt(request, session_id):
     if error_response is not None:
         return error_response
 
-    try:
-        session = GameSession.objects.select_related("user").get(id=session_id, user=user)
-    except GameSession.DoesNotExist:
-        return Response({"detail": "Game session not found."}, status=status.HTTP_404_NOT_FOUND)
-
     serializer = QuestionAttemptCreateSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
     payload = serializer.validated_data
 
-    already_answered = QuestionAttempt.objects.filter(
-        session=session,
-        question_id=payload["question_id"],
-        difficulty=payload["difficulty"],
-    ).exists()
-    if already_answered:
-        return Response(
-            {"detail": "Question already answered."},
-            status=status.HTTP_409_CONFLICT,
+    with transaction.atomic():
+        try:
+            session = GameSession.objects.select_for_update().select_related("user").get(id=session_id, user=user)
+        except GameSession.DoesNotExist:
+            return Response({"detail": "Game session not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        already_answered = QuestionAttempt.objects.filter(
+            session=session,
+            question_id=payload["question_id"],
+            difficulty=payload["difficulty"],
+        ).exists()
+        if already_answered:
+            return Response(
+                {"detail": "Question already answered."},
+                status=status.HTTP_409_CONFLICT,
+            )
+
+        attempt = QuestionAttempt.objects.create(
+            session=session,
+            question_id=payload["question_id"],
+            difficulty=payload["difficulty"],
+            chosen_index=payload["chosen_index"],
+            correct_index=payload["correct_index"],
+            is_correct=payload["chosen_index"] == payload["correct_index"],
         )
 
-    attempt = QuestionAttempt.objects.create(
-        session=session,
-        question_id=payload["question_id"],
-        difficulty=payload["difficulty"],
-        chosen_index=payload["chosen_index"],
-        correct_index=payload["correct_index"],
-        is_correct=payload["chosen_index"] == payload["correct_index"],
-    )
+        attempt_xp = _calculate_attempt_xp(session, attempt)
+        attempt.xp_awarded = attempt_xp
+        attempt.save(update_fields=["xp_awarded"])
+
+        xp_awarded = attempt_xp
+        _increment_user_xp(user, attempt_xp)
+        xp_awarded += _award_level_completion_bonus_if_needed(session, attempt.difficulty)
+        xp_awarded += _award_streak_bonus_if_needed(session)
+        _, total_xp = _increment_user_xp(user, 0)
 
     return Response(
         {
             "attempt": QuestionAttemptSerializer(attempt).data,
             "session_id": str(session.id),
+            "xp_awarded": xp_awarded,
+            "total_xp": total_xp,
         },
         status=status.HTTP_201_CREATED,
     )

@@ -83,6 +83,7 @@ class QuestionAttemptSerializer(serializers.ModelSerializer):
             "chosen_index",
             "correct_index",
             "is_correct",
+            "xp_awarded",
             "answered_at",
         ]
 

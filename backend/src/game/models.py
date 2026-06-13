@@ -12,6 +12,7 @@ class UserProfile(models.Model):
     user             = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     free_games_used  = models.PositiveIntegerField(default=0)
     is_premium       = models.BooleanField(default=False)
+    total_xp         = models.PositiveIntegerField(default=0)
 
     def can_play(self):
         return self.is_premium or self.free_games_used < settings.FREE_GAMES
@@ -75,6 +76,11 @@ class GameSession(models.Model):
     status        = models.CharField(max_length=20, choices=Status.choices, default=Status.ACTIVE)
     started_at    = models.DateTimeField(auto_now_add=True)
     completed_at  = models.DateTimeField(null=True, blank=True)
+    xp_completed_levels = models.JSONField(default=list, blank=True)
+    xp_completion_bonus_awarded = models.BooleanField(default=False)
+    xp_accuracy_bonus_awarded = models.BooleanField(default=False)
+    xp_perfect_run_bonus_awarded = models.BooleanField(default=False)
+    xp_streak_bonus_awarded_on = models.DateField(null=True, blank=True)
 
     class Meta:
         ordering = ['-started_at']
@@ -103,6 +109,7 @@ class QuestionAttempt(models.Model):
     chosen_index  = models.PositiveSmallIntegerField()   # 0–3
     correct_index = models.PositiveSmallIntegerField()   # 0–3
     is_correct    = models.BooleanField()
+    xp_awarded    = models.PositiveSmallIntegerField(default=0)
     answered_at   = models.DateTimeField(auto_now_add=True)
 
     class Meta:
