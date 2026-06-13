@@ -132,11 +132,22 @@ SPECTACULAR_SETTINGS = {
 
 CORS_ALLOW_ALL_ORIGINS = True
 
-FREE_GAMES=5
+FREE_GAMES = 5
 
-CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', 'redis://localhost:6379/0')
-CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND', CELERY_BROKER_URL)
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-ENABLE_ASYNC_TASKS = os.getenv('ENABLE_ASYNC_TASKS', 'False') == 'True'
+REDIS_URL = env.str("REDIS_URL", default="")
+CELERY_BROKER_URL = env.str(
+    "CELERY_BROKER_URL",
+    default=REDIS_URL
+)
+CELERY_RESULT_BACKEND = env.str("CELERY_RESULT_BACKEND", default=CELERY_BROKER_URL)
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
+CELERY_TIMEZONE = TIME_ZONE
+ENABLE_ASYNC_TASKS = env.bool("ENABLE_ASYNC_TASKS", default=False)
+
+# Upstash commonly uses rediss:// URLs.
+if CELERY_BROKER_URL.startswith("rediss://"):
+    CELERY_BROKER_USE_SSL = {"ssl_cert_reqs": "none"}
+if CELERY_RESULT_BACKEND.startswith("rediss://"):
+    CELERY_REDIS_BACKEND_USE_SSL = {"ssl_cert_reqs": "none"}
