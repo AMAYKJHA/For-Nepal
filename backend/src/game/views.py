@@ -1,4 +1,3 @@
-from pathlib import Path
 from datetime import timedelta
 
 from django.contrib.auth.models import User
@@ -295,35 +294,39 @@ def topic_upload(request):
     if error_response is not None:
         return error_response
 
-    pdf_file = request.FILES.get("file")
-    if not pdf_file:
-        return Response({"detail": "No file provided."}, status=status.HTTP_400_BAD_REQUEST)
+    topic_name = (request.data.get("topic") or "").strip()
+    if not topic_name:
+        return Response({"detail": "topic is required."}, status=status.HTTP_400_BAD_REQUEST)
 
-    title = (request.data.get("title") or Path(pdf_file.name).stem or "Untitled Topic")[:255]
+    description = (request.data.get("description") or "").strip()
+    pdf_file = request.FILES.get("file")
+    source_filename = pdf_file.name if pdf_file else ""
 
     topic = Topic.objects.create(
         user=user,
-        title=title,
-        source_filename=pdf_file.name,
+        title=topic_name[:255],
+        source_filename=source_filename,
         status=Topic.Status.PROCESSING,
     )
 
-    pages = extract_text_by_page(pdf_file.read())
-    if not pages:
-        topic.status = Topic.Status.FAILED
-        topic.quiz_data = {"error": "Could not extract text from PDF."}
-        topic.save(update_fields=["status", "quiz_data"])
-        return Response(
-            {
-                "detail": "Could not extract text from PDF.",
-                "topic": TopicSerializer(topic).data,
-            },
-            status=status.HTTP_400_BAD_REQUEST,
-        )
+    full_text = ""
+    if pdf_file:
+        pages = extract_text_by_page(pdf_file.read())
+        if not pages:
+            topic.status = Topic.Status.FAILED
+            topic.quiz_data = {"error": "Could not extract text from PDF."}
+            topic.save(update_fields=["status", "quiz_data"])
+            return Response(
+                {
+                    "detail": "Could not extract text from PDF.",
+                    "topic": TopicSerializer(topic).data,
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        full_text = "\n\n".join(p["text"] for p in pages)
 
-    full_text = "\n\n".join(p["text"] for p in pages)
     try:
-        quiz = generate_quiz(full_text)
+        quiz = generate_quiz(topic_name=topic_name, description=description, pdf_text=full_text)
     except Exception as exc:
         topic.status = Topic.Status.FAILED
         topic.quiz_data = {"error": str(exc)}
@@ -348,14 +351,10 @@ def topic_upload(request):
             status=status.HTTP_502_BAD_GATEWAY,
         )
 
-    generated_topic_name = quiz.get("topic")
-    if generated_topic_name and not request.data.get("title"):
-        topic.title = str(generated_topic_name)[:255]
-
     with transaction.atomic():
         topic.quiz_data = quiz
         topic.status = Topic.Status.READY
-        topic.save(update_fields=["title", "quiz_data", "status"])
+        topic.save(update_fields=["quiz_data", "status"])
 
     return Response(
         {
